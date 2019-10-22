@@ -1,0 +1,42 @@
+﻿<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="profile" href="https://gmpg.org/xfn/11">
+    <title></title>
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" media='all' />
+    <link href="~/Content/css/style-2.css" rel="stylesheet" media='all' />
+    <link href="~/Content/css/responsive.css" rel="stylesheet" media='all' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" media="all">
+    <script src="~/Scripts/js/jquery.min.js"></script>
+    <script src="~/Scripts/js/popper.min.js"></script>
+    <script src="~/Scripts/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/js/popover.js"></script>    
+    <script src="~/Scripts/js/tabletoCSV.js"></script>
+    
+</head>
+<body style="background: #F0F4F7;">
+    <div>
+        @RenderBody()
+    </div>
+    <script src="~/Content/data-tables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/data-tables/DT_bootstrap.js"></script>
+    <link href="~/Content/data-tables/DT_bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/Content/assets/css/style.css" rel="stylesheet" />
+    <script>       
+        $(document).ready(function () {
+            $(".hide_show").click(function () {
+                $(this).toggleClass("left_shift");
+                var img = $(this).find("img");
+                if ($(img).attr('src') === "~/images/menu.png") {
+                    $(img).attr('src', "~/images/close.png");
+                } else {
+                    $(img).attr('src', "~/images/menu.png")
+                }
+                $(".left_panel, .right_panel").toggleClass("collaps");
+            });
+        });
+    </script>
+</body>
+</html>

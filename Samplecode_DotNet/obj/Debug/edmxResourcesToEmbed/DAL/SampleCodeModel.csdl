@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CustomizeTemplateModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TypeId" Type="Int32" />
+    <NavigationProperty Name="TypeMaster" Relationship="Self.FK_Category_TypeMaster" FromRole="Category" ToRole="TypeMaster" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="Emailaddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="ContactPerson" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Designation" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TypeMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="BackgroundColor" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+    <Property Name="ForeColor" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+    <Property Name="Sequence" Type="Int32" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="Categories" Relationship="Self.FK_Category_TypeMaster" FromRole="TypeMaster" ToRole="Category" />
+  </EntityType>
+  <EntityType Name="UserRegistration">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DateofBirth" Type="DateTime" Precision="3" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="InitialName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" MaxLength="14" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+    <Property Name="UpdatedBy" Type="Int32" />
+    <Property Name="IPAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_Category_TypeMaster">
+    <End Role="TypeMaster" Type="Self.TypeMaster" Multiplicity="0..1" />
+    <End Role="Category" Type="Self.Category" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypeMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Category">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SampleCodeEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Categories" EntityType="Self.Category" />
+    <EntitySet Name="Customers" EntityType="Self.Customer" />
+    <EntitySet Name="TypeMasters" EntityType="Self.TypeMaster" />
+    <EntitySet Name="UserRegistrations" EntityType="Self.UserRegistration" />
+    <AssociationSet Name="FK_Category_TypeMaster" Association="Self.FK_Category_TypeMaster">
+      <End Role="TypeMaster" EntitySet="TypeMasters" />
+      <End Role="Category" EntitySet="Categories" />
+    </AssociationSet>
+    <FunctionImport Name="usp_s_Dashboard_List" ReturnType="Collection(CustomizeTemplateModel.usp_s_Dashboard_List_Result)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+      <Parameter Name="TypeId" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="usp_s_Dashboard_List_Result">
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="1" />
+    <Property Type="String" Name="Emailaddress" Nullable="false" MaxLength="1" />
+    <Property Type="String" Name="Country" Nullable="false" MaxLength="1" />
+    <Property Type="String" Name="ContactNo" Nullable="false" MaxLength="1" />
+    <Property Type="String" Name="TypeName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="SendEmail" Nullable="false" MaxLength="1" />
+    <Property Type="Int32" Name="TypeCount" Nullable="true" />
+    <Property Type="String" Name="BackgroundColor" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="ForeColor" Nullable="true" MaxLength="15" />
+    <Property Type="Int32" Name="OrderNo" Nullable="true" />
+  </ComplexType>
+</Schema>

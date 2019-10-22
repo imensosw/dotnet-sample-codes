@@ -1,0 +1,153 @@
+﻿@model CustomizeTemplate.ViewModels.DashboardViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .dataTables_wrapper {
+        margin-bottom: 50px
+    }
+    #PaymentcodeGridResults_wrapper .dataTables_filter input {
+        /*position: relative;*/
+        top: auto;
+        left: auto;
+        right: 1px;
+        z-index: 1;
+        /*top: -20px;*/
+    }
+
+    #PaymentcodeGridResults_wrapper .dataTables_filter label {
+        position: relative;
+        height: 45px;
+        padding-bottom: 9px;
+    }
+
+    body {
+        font-size: 14px
+    }
+
+    #PaymentcodeGridResults_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 0.3em .75em;
+    }
+
+        #PaymentcodeGridResults_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button.current, #PaymentcodeGridResults_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background: #41c5e3 !important; /* Old browsers */
+            background: -moz-linear-gradient(45deg, #41c5e3 0%, #8b88c2 100%) !important; /* FF3.6-15 */
+            background: -webkit-linear-gradient(45deg, #41c5e3 0%,#8b88c2 100%) !important; /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(45deg, #41c5e3 0%,#8b88c2 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#41c5e3', endColorstr='#8b88c2',GradientType=1 ) !important; /* IE6-9 fallback on horizontal gradient */
+            color: #FFffff !important;
+            border: none !important;
+        }
+</style>
+    <div class="container-fluid">
+        @Html.Partial("_Sidebar")
+        <div class="right right_panel">
+            <div class="m-5">
+                <div class="container-fluid">
+                    <div class="row my_account">
+                        <div class="col-md-12">
+                            <div class="mb-2 d-flex justify-content-between align-items-center">
+                                <h4 calss="mb-0" style="padding-left: 12px;">Dashboard</h4>
+                                <a class="btn btn btn-secondary fix_bottom"  id="btnDashboardDetail" href="javascript:;" style="display:none;"><span>Dashboard Detail</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-10">
+                        <div class="mb-1 d-flex align-items-center mobile_horizontal filter_area">
+                            @using (Ajax.BeginForm("Search", null,
+                    new AjaxOptions
+                    {
+                        HttpMethod = "post",
+                        InsertionMode = InsertionMode.Replace,
+                        LoadingElementId = "divloading",
+                        OnBegin = "ClearResults",
+                        OnSuccess = "AjaxSuccess",
+                        UpdateTargetId = "VendorGridList"
+                    }, new { role = "form", id = "AjaxForm" }))
+                            {
+
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="table-responsive sml-text" id="divDashboard">
+                           @Html.Partial("_DashboardList")
+                        </div>
+                        <div class="table-responsive sml-text" id="dashboard" style="display:none;">
+                            <a href="/Dashboard/Index"><span>Back</span></a>
+                            <table class="table statement" id="PaymentcodeGridResults">
+                                <caption style="display:none;">Dashborad</caption>
+                                <thead>
+                                    <tr>
+
+                                        <th><span class="opaq">Name</span></th>
+                                        <th><span class="opaq">Email Address</span></th>
+                                        <th><span class="opaq">Country</span></th>
+                                        <th><span class="opaq">Contact No</span></th>
+                                        <th><span class="opaq">Type</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.DashboardListModels != null && Model.DashboardListModels.Count > 0)
+                                    {
+                                        foreach (var item in Model.DashboardListModels)
+                                        {
+                                            <tr>
+                                                <td><span class="opaq">@item.Name</span></td>
+                                                <td><span class="opaq">@item.Emailaddress</span></td>
+                                                <td><span class="opaq">@item.Country</span></td>
+                                                <td><span class="opaq">@item.ContactNo</span></td>
+                                                <td><span class="opaq">@item.TypeName</span></td>
+                                            </tr>
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#PaymentcodeGridResults').dataTable({
+                "aaSorting": [[0, "asc"], [1, "asc"]],
+                "iDisplayLength": 50,
+                "fixedHeader": true,
+                "columnDefs": [{
+                    "targets": [3],
+                    "orderable": false
+                }],
+                "oLanguage": {
+                    "sLengthMenu": 'Records per page <select>' +
+                        '<option value="5">5</option>' +
+                        '<option value="10">10</option>' +
+                        '<option value="25">25</option>' +
+                        '<option value="50">50</option>' +
+                        '<option value="-1">All</option>' +
+                        '</select>',
+                    "sEmptyTable": " No records available",
+                }
+            });
+        });
+        $(document).on('click', '#btnDashboardDetail', function () {
+            $("#dashboard").show();
+            $("#divDashboard").hide();
+             $.ajax({
+            url: '@Url.Action("DashboardList", "Dashboard")',
+               data: {},               
+               success: function (data) {                    
+          },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+               
+            }
+        })       
+        });
+        
+        $(".ActiveDashboard").addClass("active");
+    </script>
+

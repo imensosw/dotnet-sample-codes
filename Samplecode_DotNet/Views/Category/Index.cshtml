@@ -1,0 +1,163 @@
+﻿@model CustomizeTemplate.ViewModels.CategoryViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+}
+<style>
+    .dataTables_wrapper {
+        margin-bottom: 50px
+    }
+
+    #PaymentcodeGridResults_wrapper .dataTables_filter input {
+        /*position: relative;*/
+        top: auto;
+        left: auto;
+        right: 1px;
+        z-index: 1;
+        /*top: -20px;*/
+    }
+
+    #PaymentcodeGridResults_wrapper .dataTables_filter label {
+        position: relative;
+        height: 45px;
+        padding-bottom: 9px;
+    }
+
+    body {
+        font-size: 14px
+    }
+
+    #PaymentcodeGridResults_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 0.3em .75em;
+    }
+
+        #PaymentcodeGridResults_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button.current, #PaymentcodeGridResults_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background: #41c5e3 !important; /* Old browsers */
+            background: -moz-linear-gradient(45deg, #41c5e3 0%, #8b88c2 100%) !important; /* FF3.6-15 */
+            background: -webkit-linear-gradient(45deg, #41c5e3 0%,#8b88c2 100%) !important; /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(45deg, #41c5e3 0%,#8b88c2 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#41c5e3', endColorstr='#8b88c2',GradientType=1 ) !important; /* IE6-9 fallback on horizontal gradient */
+            color: #FFffff !important;
+            border: none !important;
+        }
+</style>
+<div class="modal fade" id="CategoryPopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Ajax.BeginForm("AddCategory", null,
+       new AjaxOptions
+       {
+           HttpMethod = "post",
+           InsertionMode = InsertionMode.Replace,
+           OnBegin = "ClearResults",
+           OnSuccess = "AjaxSuccess",
+           UpdateTargetId = "CategoryGridList",
+           OnFailure = "Categoryfail"
+       }, new { role = "form", id = "AjaxForm" }))
+            {
+                @Html.Partial("_AddCategory")
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-login" id="loadingCategory">Submit</button>
+                </div>
+            }
+        </div>
+    </div>
+
+</div> <!--/ Add new-->
+<div class="container-fluid">
+    @Html.Partial("_Sidebar")
+    <div class="right right_panel">
+        <div class="m-5">
+            <div class="container-fluid">
+                <div class="row my_account">
+                    <div class="col-md-12">
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <h4 calss="mb-0" style="padding-left: 12px;">Category</h4>
+                            <div>
+                                <a class="btn btn btn-secondary fix_bottom" href="#" id="btnDownload" title="Download" style="display:none;">Download</a>
+                                <a class="btn btn btn-secondary fix_bottom" data-toggle="modal" id="btnNewCategory" data-target="#CategoryPopup" href="javascript:;"><i class="fa fa-plus"></i> <span>New Category</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <div class="col-lg-10">
+                    <div class="mb-1 d-flex align-items-center mobile_horizontal filter_area">
+                        @using (Ajax.BeginForm("Search", null,
+                new AjaxOptions
+                {
+                    HttpMethod = "post",
+                    InsertionMode = InsertionMode.Replace,
+                    LoadingElementId = "divloading",
+                    OnBegin = "ClearResults",
+                    OnSuccess = "AjaxSuccess",
+                    UpdateTargetId = "VendorGridList"
+                }, new { role = "form", id = "AjaxForm" }))
+                        {
+
+                        }
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive sml-text">
+                        @Html.Partial("_CategoryList")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="~/Content/Content/assets/js/lib/jquery-1.11.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.9.2.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.validate.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script type="text/javascript" src="~/Scripts/expressive.annotations.validate.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $('#PaymentcodeGridResults').dataTable({
+            "aaSorting": [[0, "asc"], [1, "asc"]],
+            "iDisplayLength": 50,
+            "fixedHeader": true,
+            "columnDefs": [{
+                "defaultContent": "-",
+                "targets": "_all"
+            }],
+            "oLanguage": {
+                "sLengthMenu": 'Records per page <select>' +
+                    '<option value="5">5</option>' +
+                    '<option value="10">10</option>' +
+                    '<option value="25">25</option>' +
+                    '<option value="50">50</option>' +
+                    '<option value="-1">All</option>' +
+                    '</select>',
+                "sEmptyTable": " No records available",
+            }
+        });
+    });
+    $(document).on("click", "#btnNewCategory", function () {
+        $("#txtName").val("");
+        $("#txtName-error").text("");
+        $("#txtType").val("");
+        $("#txtType-error").text("");
+        $(".lblLoginErrorMessage").text("")
+        if ($("#diverror").length) {
+            $("#diverror").removeClass("alert alert-danger");
+        }
+    });
+    function deletefuction(id) {
+        if (confirm("Please confirm if you want to remove this record") == true) {
+            window.location.href = "/Delete/" + id;
+            return true;
+        }
+        return false;
+    }
+    $(".ActiveCategory").addClass("active");
+</script>
+

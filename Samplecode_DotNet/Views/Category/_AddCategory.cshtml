@@ -1,0 +1,54 @@
+﻿@model CustomizeTemplate.ViewModels.CategoryViewModel
+@{
+    ViewBag.Title = "Category";
+    Layout = null;
+}
+<style>
+    select.form-control:not([size]):not([multiple]) {
+        height: calc(2.50rem + 2px) !important;
+    }
+</style>
+<div id="CategoryGridList">
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorCode))
+    {
+        if (Model.ErrorCode == "Error")
+        {
+            <div class="alert alert-danger" id="diverror">
+                <label for="" class="field-validation-error lblLoginErrorMessage">@Model.ErrorMessage</label>
+            </div>
+        }
+    }
+
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="">Name:</label>
+            @Html.TextBoxFor(model => model.objModel.Name, new { @id = "txtName", @class = "form-control", placeholder = "Enter Category Name", autocomplete = "off" })
+            @Html.ValidationMessageFor(model => model.objModel.Name)
+        </div>
+        <div class="form-group">
+            <label for="">Type</label>
+            @Html.DropDownListFor(model => model.objModel.TypeId, new SelectList(Model.objTypeList, "Id", "Name"), new { @class = "form-control" }),
+            @Html.ValidationMessageFor(model => model.objModel.TypeId, "", new { @class = "text-danger" })
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    function AjaxSuccess() {
+       if ('@Model.ErrorCode' != "Error") {
+            $("#CategoryPopup").css('display', 'none');
+            $("div.modal-backdrop").remove();
+            window.location = "/Category/Index";
+        }
+      else {
+            $('#loadingCategory').html('Submit');
+        }
+    }
+    function ClearResults() {
+        $('#loadingCategory').html('<i class="fa fa-spinner fa-spin"></i> Processing..');
+    }
+$(".ActiveCategory").addClass("active");
+</script>
+

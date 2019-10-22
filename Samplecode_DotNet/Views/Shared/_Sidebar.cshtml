@@ -1,0 +1,102 @@
+﻿@{
+    
+}
+<style>
+    .tooltipcustom {
+        position: relative;
+        display: inline-block;
+    }
+
+        .tooltipcustom .tooltiptext {
+            visibility: hidden;
+            width: 160px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            line-height: 120%;
+            font-size: 13px;
+        }
+
+
+            .tooltipcustom .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        .tooltipcustom:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+</style>
+<div id="includedContent">
+    <div class="hide_show animate">       
+        <span class="icon-bar top"></span> <span class="icon-bar mid"></span> <span class="icon-bar btm"></span>
+    </div>
+    <div class="left left_panel animate">
+        <div class="logo">            
+            <a href="/Account/Registration/" class="mainclientlogo"><img class="m-auto" src="~/Content/images/imensologo1.png" style="height: 64px;width: 119px;padding-left:7px;"/></a>
+        </div>
+        <div class="user-account mb-4">
+            <div class="d-flex">
+                <div class="user-img">
+                    @if (Session != null && Session["UserSession"] != null)
+                    {
+                        @CustomizeTemplate.Helper.SessionHelper.GetInitialName()
+                    }
+                </div>
+                <div class="user-name">
+                    <div class="nav-item">
+                        <span class="semi-bold d-block">
+                           
+                            <label class="UserLogin">
+                                @if (Session != null && Session["UserSession"] != null)
+                                {
+                                    @CustomizeTemplate.Helper.SessionHelper.GetFullName()
+                                }
+                                
+                            </label>
+                           
+
+                        </span>
+                        <a class="v-sml-btn" href="#" id="btnlogout" onclick="doLogout();"> Logout </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scrollable">
+            <nav class="nav flex-column sidebar_nav">
+                <a class="nav-link ActiveDashboard" href="#">Dashboard</a>
+                <a class="nav-link ActiveCustomer" href="#>Customer</a>
+                <a class="nav-link ActiveCategory" href="#">Category</a>
+                <a class="nav-link ActiveTemplate" href="#">Template</a>
+            </nav>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">  
+   
+    setTimeout(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    }, 33000);
+    function doLogout() {      
+        var backlen = history.length;
+        history.go(-backlen);       
+        window.location="/Account/Registration";
+    }
+</script>  

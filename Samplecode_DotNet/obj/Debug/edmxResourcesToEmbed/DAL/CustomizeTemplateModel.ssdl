@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CustomizeTemplateModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="TypeId" Type="int" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="150" Nullable="false" />
+    <Property Name="LastName" Type="varchar" MaxLength="150" />
+    <Property Name="Emailaddress" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="CompanyName" Type="varchar" MaxLength="100" />
+    <Property Name="Country" Type="varchar" MaxLength="50" />
+    <Property Name="ContactNo" Type="varchar" MaxLength="50" />
+    <Property Name="URL" Type="nvarchar" MaxLength="500" />
+    <Property Name="ContactPerson" Type="nvarchar" MaxLength="100" />
+    <Property Name="Designation" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TypeMaster">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="BackgroundColor" Type="nchar" MaxLength="15" />
+    <Property Name="ForeColor" Type="nchar" MaxLength="15" />
+    <Property Name="Sequence" Type="int" />
+    <Property Name="Status" Type="int" />
+  </EntityType>
+  <EntityType Name="UserRegistration">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmailAddress" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="DateofBirth" Type="datetime" />
+    <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="InitialName" Type="varchar" MaxLength="50" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" />
+    <Property Name="Status" Type="nchar" MaxLength="14" Nullable="false" />
+    <Property Name="CreatedBy" Type="int" Nullable="false" />
+    <Property Name="UpdatedBy" Type="int" />
+    <Property Name="IPAddress" Type="varchar" MaxLength="50" />
+    <Property Name="UserType" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <Association Name="FK_Category_TypeMaster">
+    <End Role="TypeMaster" Type="Self.TypeMaster" Multiplicity="0..1" />
+    <End Role="Category" Type="Self.Category" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypeMaster">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Category">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CustomizeTemplateModelStoreContainer">
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TypeMaster" EntityType="Self.TypeMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserRegistration" EntityType="Self.UserRegistration" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Category_TypeMaster" Association="Self.FK_Category_TypeMaster">
+      <End Role="TypeMaster" EntitySet="TypeMaster" />
+      <End Role="Category" EntitySet="Category" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

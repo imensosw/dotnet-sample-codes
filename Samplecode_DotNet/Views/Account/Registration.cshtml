@@ -1,0 +1,190 @@
+﻿@model CustomizeTemplate.ViewModels.UserViewModel
+@{
+    Layout = null;
+    var Hostkey = System.Configuration.ConfigurationManager.AppSettings["Host"].ToString();
+}
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="profile" href="https://gmpg.org/xfn/11">
+    <title>Email Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" media="all">
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" media='all' />
+    <link href="~/Content/css/style-2.css" rel="stylesheet" media='all' />
+    <link href="~/Content/css/responsive.css" rel="stylesheet" media='all' />
+    <script src="~/Scripts/js/jquery.min.js"></script>
+    <script src="~/Scripts/js/popper.min.js"></script>
+    <script src="~/Scripts/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Content/Content/assets/js/lib/jquery-1.11.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.9.2.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script type="text/javascript" src="~/Scripts/expressive.annotations.validate.js"></script>
+    <script src="~/Content/Content/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <link href="~/Content/Content/assets/plugins/bootstrap-datepicker/Datepicker.css" rel="stylesheet" />
+    <style>
+        .tooltipcustom {
+            position: relative;
+            display: inline-block;
+        }
+
+            .tooltipcustom .tooltiptext {
+                visibility: hidden;
+                width: 160px;
+                background-color: #555;
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+                position: absolute;
+                z-index: 1;
+                bottom: 125%;
+                left: 50%;
+                margin-left: -60px;
+                opacity: 0;
+                transition: opacity 0.3s;
+                line-height: 120%;
+                font-size: 13px;
+            }
+
+
+                .tooltipcustom .tooltiptext::after {
+                    content: "";
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    margin-left: -5px;
+                    border-width: 5px;
+                    border-style: solid;
+                    border-color: #555 transparent transparent transparent;
+                }
+
+            .tooltipcustom:hover .tooltiptext {
+                visibility: visible;
+                opacity: 1;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <section class="banner5 row ">
+            <div class="col-lg-12 align-self-center">
+                <div role="document" class="login-modal m-auto">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="mb-4 text-center brand">
+                                <img class="m-auto" src="~/Content/images/imensologo.png" />
+                            </div>
+                            <div class="reg-ben">
+                                <div class="login-fields">
+                                    @using (Ajax.BeginForm("Login", null,
+                                    new AjaxOptions
+                                    {
+                                        HttpMethod = "post",
+                                        InsertionMode = InsertionMode.Replace,
+                                        OnBegin = "ClearResultsLogin",
+                                        OnSuccess = "LoginAjaxSuccess",
+                                        UpdateTargetId = "LoginGridList"
+                                    }, new { role = "form", id = "AjaxFormLogin" }))
+                                    {
+                                        @Html.Partial("_Login")
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <button type="submit" id="btnLogin" value="Login" class=" btn btn-login" name="submit">Login</button>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="mt-5">
+                                    <p class="d-pay-bill" style="display: none;"><span>Don't want to login?</span> <a href="javascript:;" class="btn btn-secondary ml-2"> Pay bill directly</a></p>
+                                    <p class="login-first" style="display: none;"><span>Have an account?</span><a href="javascript:;" class="btn btn-secondary ml-2"> Login</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script type="text/javascript">
+        function LoginAjaxSuccess(e) {
+
+        }
+
+        function AjaxSuccess(e) {
+
+        }
+        function ClearResults() {
+
+        }
+
+        setTimeout(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        }, 33000);
+
+        $(document).ready(function () {
+            if (localStorage.directlogin != null && localStorage.directlogin == "1") {
+                localStorage.removeItem("directlogin");
+                $('#loadingforgot').html('Submit');
+                $('#forgotverificationpopup').hide();
+                $(".lblLoginErrorMessage").text("");
+                $("#txtLoginEmailAddress-error").text("");
+                $("#txtLoginPassword-error").text("");
+                $("#txtLoginEmailAddress").val("");
+                $("#txtLoginPassword").val("");
+                $('.login-fields').show();
+                $('.pay-bill-fields').hide();
+                $('.login-first').hide();
+                $('.d-pay-bill').show();
+                $('#forgotPopup').hide();
+                if ($("#diverrorlogin").length) {
+                    $("#diverrorlogin").removeClass("alert alert-danger");
+                }
+            }
+
+            $(".login").click(function () {
+                $(this).addClass('btn-primary');
+                $(this).removeClass('btn-flat');
+                $('.login-fields').show();
+                $('#txtLoginEmailAddress').focus();
+                if ($("#diverrorlogin").length) {
+                    $("#diverrorlogin").removeClass("alert alert-danger");
+                }
+
+            });
+            $(".login-first a").click(function () {
+
+                $(".lblLoginErrorMessage").text("");
+                $("#txtLoginEmailAddress-error").text("");
+                $("#txtLoginPassword-error").text("");
+                $("#txtLoginEmailAddress").val("");
+                $("#txtLoginPassword").val("");
+                $('.login-fields').show();
+                $('.login-first').hide();
+                $('#txtLoginEmailAddress').focus();
+
+            });
+
+
+
+        });
+
+        function ClearResults() { }
+
+        function LoginAjaxSuccess() { }
+
+        if ('@Hostkey.Length' <= 0 || '@Hostkey.ToUpper()' == 'SERVER') {
+            if (location.protocol != 'https:') {
+                location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+            }
+        }
+    </script>
+    @section script{
+        @System.Web.Optimization.Scripts.Render("~/bundles/jqueryval")
+
+    }
+   
+</body>
+</html>

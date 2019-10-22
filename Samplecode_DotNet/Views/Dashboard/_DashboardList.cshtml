@@ -1,0 +1,35 @@
+﻿@model CustomizeTemplate.ViewModels.DashboardViewModel
+@{
+    Layout = null;
+}
+
+
+<div id="VendorGridList">
+    <table class="table statement" id="PaymentcodeGridResults">
+        <caption style="display:none;">Customer Mail Summary</caption>
+        <thead>
+            <tr>
+
+                <th><span class="opaq">Name</span></th>
+                <th><span class="opaq">Template</span></th>
+                <th><span class="opaq">Date</span></th>
+              
+            </tr>
+        </thead>
+        <tbody>
+           @if (Model.CustomerSummarytListModels.Count > 0)
+            {
+                foreach (var item in Model.CustomerSummarytListModels)
+                {
+                    <tr>
+                        <td><span class="opaq">@item.CustomerName</span></td>
+                        <td><span class="opaq">@item.TemplateName</span></td>
+                        <td><span class="opaq">@item.SendDatetime</span></td>
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
